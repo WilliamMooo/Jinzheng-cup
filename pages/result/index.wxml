@@ -1,0 +1,16 @@
+<!--pages/result/index.wxml-->
+
+
+<view class='pages'>
+  <view class='top'></view>
+  <view class='result'>
+    <image class="show-image" mode="aspectFitf" src="{{src}}"></image>
+  </view>
+  <image class='background' src='../photos/background.png' mode='heightFix'></image>
+  <view class='btn'>
+    <button open-type='share' bindtap='save'>保存并分享</button>
+    <button bindtap='save'>仅保存</button>
+    <button bindtap='back'>再来一张</button>
+  </view>
+</view>
+

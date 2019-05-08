@@ -1,0 +1,49 @@
+/**index.wxss**/
+
+Page{
+  height:100%;
+  width:100%;
+}
+
+.wholepage{
+  display:flex;
+  flex-direction: column;
+  width:100%;
+  height:100%;
+}
+
+.firestyle{
+  height:50%;
+  margin-left:10.4%;
+  margin-top: 9.3%;
+}
+
+.firestyle image{
+  height:100%;
+}
+
+.titlestyle{
+  font-weight:bold;
+  font-size:55px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.leafstyle
+{
+  flex-grow:1;
+}
+
+.picstyle{
+  width:100%;
+  margin-top:57.5px;
+  position:absolute;
+}
+
+.buttonclass{
+  margin-left:21%;
+  margin-right:21%;
+  margin-top:95px;
+  background-color:#000000ef;
+  color:#fefefe;
+  border-radius: 30px;
+}

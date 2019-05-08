@@ -1,0 +1,75 @@
+/* pages/lib/index.wxss */
+Page{
+  width:100%;
+  height:100%;
+}
+
+.wholepage{
+  display:flex;
+  flex-direction: column;
+  width:100%;
+  height:100%;
+}
+
+.selectingpic{
+  flex-grow:1;
+  width:100%;
+  height:65%;
+  display:flex;
+  flex-direction: row;
+}
+
+.leftbutton{
+  width:20%;
+  flex-grow:1;
+}
+
+.leftbutton image
+{
+  margin-top: 70px;
+  height:80%;
+  width:80%;
+}
+
+.viewingwindow{
+  width:60%;
+  flex-grow:1;
+  margin-top:50px;
+}
+
+.viewingwindow image{
+  height:100%;
+  width:100%;
+}
+
+.rightbutton{
+  width:20%;
+  flex-grow:1;
+}
+
+.rightbutton image{
+  width:80%;
+  height:80%;
+  margin-top:70px;
+  margin-left:10px;
+}
+
+.backgroundpic{
+  height:35%;
+  width:100%;
+}
+
+.picstyle
+{
+  width:100%;
+  position:absolute;
+}
+
+.buttonclass{
+  margin-left:21%;
+  margin-right:21%;
+  margin-top:40px;
+  background-color:#000000ef;
+  color:#fefefe;
+  border-radius: 30px;
+}

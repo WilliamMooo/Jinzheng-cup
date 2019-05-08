@@ -1,0 +1,19 @@
+<!-- pages/lib/index.wxml-->
+<view class="wholepage">
+  <view class="selectingpic">
+    <view class="leftbutton">
+      <image src="../../image/leftside.svg" mode='widthFixed' bindtap="leftview"></image>
+    </view>
+    <view class="viewingwindow">
+    <image src='{{imagecollection[a]}}' mode="widthFixed"></image>    
+    </view>
+    <view class="rightbutton">
+      <image src="../../image/rightside.svg" mode='widthFixed' bindtap="rightview"></image>
+    </view>
+  </view>
+  <view class="backgroundpic">
+    <image src='../../image/background2.png' class='picstyle' mode='widthFixed'></image>
+    <button class="buttonclass" bindtap="OnTouchGo">下一步</button>
+  </view>
+  <image src='{{test}}'></image>
+</view>

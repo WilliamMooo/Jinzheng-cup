@@ -1,0 +1,75 @@
+{
+	"description": "项目配置文件",
+	"packOptions": {
+		"ignore": []
+	},
+	"setting": {
+		"urlCheck": false,
+		"es6": true,
+		"postcss": true,
+		"minified": true,
+		"newFeature": true,
+		"autoAudits": false
+	},
+	"compileType": "miniprogram",
+	"libVersion": "2.6.6",
+	"appid": "wx4e8df50b59e831c6",
+	"projectname": "%E9%87%91%E8%AF%81%E6%9D%AF",
+	"debugOptions": {
+		"hidedInDevtools": []
+	},
+	"isGameTourist": false,
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
+	"condition": {
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
+		"game": {
+			"currentL": -1,
+			"list": []
+		},
+		"miniprogram": {
+			"current": 0,
+			"list": [
+				{
+					"id": 0,
+					"name": "选择相片",
+					"pathName": "pages/index/index",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "素材库",
+					"pathName": "pages/lib/index",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 2,
+					"name": "处理图片",
+					"pathName": "pages/canvas/index",
+					"query": "photoPos=http://tmp/wx4e8df50b59e831c6.o6zAJs5gaHfCEcUnz-edDmTEeIEQ.TvpzXUOo5IUBe8994bae892134ac6da33eee21d6f481.png",
+					"scene": null
+				},
+				{
+					"id": 3,
+					"name": "处理结果",
+					"pathName": "pages/result/index",
+					"query": "photoPos=http://tmp/wx4e8df50b59e831c6.o6zAJs5gaHfCEcUnz-edDmTEeIEQ.TvpzXUOo5IUBe8994bae892134ac6da33eee21d6f481.png",
+					"scene": null
+				}
+			]
+		}
+	}
+}

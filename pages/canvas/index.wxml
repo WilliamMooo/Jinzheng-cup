@@ -1,0 +1,32 @@
+<!--pages/canvas/index.wxml-->
+  <view class="masktest"  wx:if="{{showColorPicker}}" bindtap='closeColorPicker'>
+    <view class="color-picker-wrapper" wx:if="{{showColorPicker}}">
+      <color-picker data-id="3" class="color-picker" colorData="{{colorData}}" rpxRatio="{{rpxRatio}}" bindchangecolor="onChangeColor"></color-picker>
+    </view>
+    </view>
+<view class="pages">
+  <view class="top">
+    <image src="{{logo[0]}}" class="buttonlogo1" mode="widthFix" bindtap='redraw'></image>
+    <image src="{{logo[1]}}" class="buttonlogo2" mode="widthFix" bindtap='next'></image>
+  </view>
+  <view class="drawArea">
+    <canvas class="myCanvas" disable-scroll="true" canvas-id="myCanvas"  bindtouchend='fillColor' bindtouchstart='drawrevoke'></canvas>
+  </view>
+  <view class="colorboard">
+   <swiper class='swiper1' display-multiple-items='{{6}}' >
+   <swiper-item    wx:for="{{numOfColor}}" bindtap="currentcolor" data-index="{{index}}"> 
+   <view class="colorItem" style="background:{{itemcolor[index]}}" >
+   </view>
+   </swiper-item>
+   <swiper-item    bindtap="toggleColorPicker"> 
+   <view class="colorItem1" style="background:{{currentColor}}" >
+   </view>
+   </swiper-item>
+   </swiper>
+  </view>
+  <view class="bottom">
+    <image src='../photos/search.svg' ></image>
+    <image src='../photos/logoword.svg'></image>
+    <image src='../photos/logocheck.svg' ></image>
+  </view>
+</view>
