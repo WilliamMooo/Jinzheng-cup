@@ -8,11 +8,11 @@
 
 .drawArea{
   flex:1;
-  height: 90vh;
+  height: 60vh;
   width: 100%;
 }
 
 .myCanvas{
-  height:414px;
-  width:450px;
+  height:60vh;
+  width: 100vw;
 }

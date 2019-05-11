@@ -44,9 +44,7 @@ Page({
           name: 'image',
           success(res) {
             let data = JSON.parse(res.data)
-            _this.setData({
-              src: data.img_dataurl
-            })
+            _this.setData({ src: data.img_dataurl })
           }
         })
         wx.navigateTo({

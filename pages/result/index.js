@@ -14,6 +14,7 @@ Page({
   },
   save: function () {
     var _this = this
+  
     wx.saveImageToPhotosAlbum({
       filePath : _this.data.src,
       success(res) {
@@ -26,22 +27,15 @@ Page({
   },
   back: function () {
     var _this = this;
-    wx.navigateTo({ url: '../index/index' })
+    wx.navigateTo({
+      url: '../selectPhoto/index?photoPos=' + _this.data.originSrc,
+    })
   },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
     var _this = this;
-    if (options.photoPos == '' || options.photoPos == null) {
-      wx.showToast({
-        title: '图片加载失败',
-        icon: 'success'
-      })
-      setTimeout(function () {
-        wx.navigateTo({ url: '../index/index' })
-      }, 1000)
-    }
     _this.setData({
       src: options.photoPos,
       originSrc: options.photoPos

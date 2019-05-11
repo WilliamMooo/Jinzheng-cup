@@ -1,10 +1,14 @@
 // pages/lib/index.js
+import transferSrc from '../../utils/base64src.js'
+
+
+
 Page({
   data: {
     imagecollection:['../../image/background2.png','../../image/blackbutton.png','../../image/fire.png'],
     imagesetsize:2,
     a:0,
-    test:''
+    src:''
   },
 
   leftview:function(){
@@ -26,21 +30,35 @@ Page({
     this.setData({ a: b })
   },
 
-  OnTouchGo:function(){
-    let photoPath = this.data.imagecollection[this.data.a]
-    console.log(photoPath)
+  next:function() {
+    const _this = this;
+    const photoPath = _this.data.imagecollection[this.data.a]
     wx.request({
       url: 'https://jzb.deeract.com/api/photograph',
-      data: { 'img_dataurl': photoPath },
-      header: { 'content-type': 'multipart/form-data' },
+      method: 'POST',
+      header: { 'content-type': 'application/json' },
+      data: {
+        'name': 'image',
+        'image_url': photoPath
+      },
       success(res) {
-        console.log(res.data)
+        transferSrc(res.data.img_dataurl).then( data =>  {
+          _this.setData({ src: data })
+        })
       }
     })
-    // wx.navigateTo({
-    //   url: '../canvasTest/index?photoPos=' + photoPath,
-    // })
+
   },
+
+  loadImg: function() {
+    const _this = this
+    wx.navigateTo({
+      url: '../canvasTest/index?photoPos=' + _this.data.src,
+    })
+    _this.data.src = ''
+  },
+
+  
 
   /**
  * 生命周期函数--监听页面加载
@@ -49,15 +67,13 @@ Page({
     let _this = this;
     wx.request({
       url: 'https://jzb.deeract.com/api/gallery',
-      header: {
-        'content-type': 'application/json'
-      },
+      header: { 'content-type': 'application/json' },
       method: 'GET',
       success(res) {
         _this.setData({
-          imagecollection: res.data
+          imagecollection: res.data,
+          imagesetsize: res.data.length,
         })
-        console.log(res.data)
       }
     })
   },
