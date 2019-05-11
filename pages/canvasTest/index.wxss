@@ -13,6 +13,6 @@
 }
 
 .myCanvas{
-  height:100%;
-  width:100%;
+  height:414px;
+  width:450px;
 }

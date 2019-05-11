@@ -15,5 +15,4 @@
     <image src='../../image/background2.png' class='picstyle' mode='widthFixed'></image>
     <button class="buttonclass" bindtap="OnTouchGo">下一步</button>
   </view>
-  <image src='{{test}}'></image>
 </view>

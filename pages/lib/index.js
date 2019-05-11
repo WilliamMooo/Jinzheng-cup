@@ -2,7 +2,7 @@
 Page({
   data: {
     imagecollection:['../../image/background2.png','../../image/blackbutton.png','../../image/fire.png'],
-    imagesetsize:3,
+    imagesetsize:2,
     a:0,
     test:''
   },
@@ -14,7 +14,7 @@ Page({
       b = this.data.imagesetsize - 1
     }
     this.setData({a:b})
-    console.log(this.data.a)
+    console.log(this.data.imagecollection[this.data.a])
   },
 
   rightview:function(){
@@ -24,13 +24,22 @@ Page({
       b = 0
     }
     this.setData({ a: b })
-    console.log(this.data.a)
   },
 
   OnTouchGo:function(){
-    wx.navigateTo({
-      url: '/pages/canvasTest/index',
+    let photoPath = this.data.imagecollection[this.data.a]
+    console.log(photoPath)
+    wx.request({
+      url: 'https://jzb.deeract.com/api/photograph',
+      data: { 'img_dataurl': photoPath },
+      header: { 'content-type': 'multipart/form-data' },
+      success(res) {
+        console.log(res.data)
+      }
     })
+    // wx.navigateTo({
+    //   url: '../canvasTest/index?photoPos=' + photoPath,
+    // })
   },
 
   /**
@@ -39,16 +48,16 @@ Page({
   onLoad: function (options) {
     let _this = this;
     wx.request({
-      url: 'https://jzb.deeract.com/gallery',
+      url: 'https://jzb.deeract.com/api/gallery',
       header: {
-        'content-type': 'application/json' // 默认值
+        'content-type': 'application/json'
       },
       method: 'GET',
-      success(data) {
+      success(res) {
         _this.setData({
-          test: data
+          imagecollection: res.data
         })
-        console.log(data)
+        console.log(res.data)
       }
     })
   },

@@ -4,6 +4,7 @@ const app = getApp()
 
 Page({
   data:{
+    src: '../../image/fire.png',
   },
 
   start: function () {
@@ -32,11 +33,22 @@ Page({
   getPhoto: function () {
     var _this = this;
     wx.chooseImage({
-      count: 1, // 默认9
+      count: 1,
       sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
       sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
       success: function (res) {
-        _this.setData({ src: res.tempFilePaths })
+        const tempFilePaths = res.tempFilePaths
+        wx.uploadFile({
+          url: 'https://jzb.deeract.com/api/photograph',
+          filePath: tempFilePaths[0],
+          name: 'image',
+          success(res) {
+            let data = JSON.parse(res.data)
+            _this.setData({
+              src: data.img_dataurl
+            })
+          }
+        })
         wx.navigateTo({
           url: '../canvasTest/index?photoPos=' + _this.data.src,
         })
