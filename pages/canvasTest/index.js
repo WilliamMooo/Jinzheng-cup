@@ -340,7 +340,7 @@ function cleanthephoto(data) {
       }
       while (head < tail)
       console.log(tail)
-      if (tail <= 5) {
+      if (tail <= 100) {
         for (let m = 1; m <= tail; m++) {
           let x = arr[m]
           data[x] = 0
@@ -388,16 +388,17 @@ Page({
           var originalHeight = cfg.photo.originalHeight = res.height;
           var originalWidth = cfg.photo.originalWidth = res.width;
           if (originalHeight / originalWidth > canvasWrapper.height / canvasWrapper.width) {
-            cfg.canvasHeight = canvasWrapper.height;
-            cfg.canvasWidth = originalWidth * cfg.canvasHeight / originalHeight;
+            cfg.canvasHeight = parseInt(canvasWrapper.height);
+            cfg.canvasWidth = parseInt(originalWidth * cfg.canvasHeight / originalHeight);
           } else {
-            cfg.canvasWidth = canvasWrapper.width;
-            cfg.canvasHeight = originalHeight * cfg.canvasWidth / originalWidth;
+            cfg.canvasWidth = parseInt(canvasWrapper.width);
+            cfg.canvasHeight = parseInt(originalHeight * cfg.canvasWidth / originalWidth);
           }
           that.setData({
             canvasWidth: cfg.canvasWidth,
             canvasHeight: cfg.canvasHeight
           });
+          console.log(cfg)
           that.drawImagescene()
         }
       })
@@ -410,14 +411,12 @@ Page({
   },
 
   processpic: function() {
-    let one = parseInt(cfg.canvasWidth)
-    let two = parseInt(cfg.canvasHeight)
     wx.canvasGetImageData({
       canvasId: 'myCanvas',
       x: 0,
       y: 0,
-      width: one,
-      height: two,
+      width: cfg.canvasWrapperWidth,
+      height: cfg.canvasWrapperHeight,
       success(res) {
         const data = convertToGrayscale(res.data)
         wx.canvasPutImageData({
@@ -425,8 +424,8 @@ Page({
           data,
           x: 0,
           y: 0,
-          width: one,
-          height: two,
+          width: cfg.canvasWrapperWidth,
+          height: cfg.canvasWrapperHeight,
           success: (res) => {
             console.log(res)
           },
@@ -442,14 +441,12 @@ Page({
   },
 
   handlepixel: function() {
-    let one = parseInt(cfg.canvasWidth)
-    let two = parseInt(cfg.canvasHeight)
     wx.canvasGetImageData({
       canvasId: 'myCanvas',
       x: 0,
       y: 0,
-      width: one,
-      height: two,
+      width: cfg.canvasWrapperWidth,
+      height: cfg.canvasWrapperHeight,
       success(res) {
         const data = handlecolor(res.data)
         wx.canvasPutImageData({
@@ -457,8 +454,8 @@ Page({
           data,
           x: 0,
           y: 0,
-          width: one,
-          height: two,
+          width: cfg.canvasWrapperWidth,
+          height: cfg.canvasWrapperHeight,
           success: (res) => {
             console.log(res)
           },
@@ -474,14 +471,12 @@ Page({
   },
 
   furtherprocess: function() {
-    let one = parseInt(cfg.canvasWidth)
-    let two = parseInt(cfg.canvasHeight)
     wx.canvasGetImageData({
       canvasId: 'myCanvas',
       x: 0,
       y: 0,
-      width: one,
-      height: two,
+      width: cfg.canvasWrapperWidth,
+      height: cfg.canvasWrapperHeight,
       success(res) {
         const data = cleanthephoto(res.data)
         wx.canvasPutImageData({
@@ -489,8 +484,8 @@ Page({
           data,
           x: 0,
           y: 0,
-          width: one,
-          height: two,
+          width: cfg.canvasWrapperWidth,
+          height: cfg.canvasWrapperHeight,
           success: (res) => {
             console.log(res)
           },
@@ -508,14 +503,12 @@ Page({
   paintcanvas: function(event) {
     let pointx = event.detail.x
     let pointy = event.detail.y
-    let one = parseInt(cfg.canvasWidth)
-    let two = parseInt(cfg.canvasHeight)
     wx.canvasGetImageData({
       canvasId: 'myCanvas',
       x: 0,
       y: 0,
-      width: one,
-      height: two,
+      width: cfg.canvasWrapperWidth,
+      height: cfg.canvasWrapperHeight,
       success(res) {
         const data = fillcolor(res.data, pointx, pointy)
         wx.canvasPutImageData({
@@ -523,8 +516,8 @@ Page({
           data,
           x: 0,
           y: 0,
-          width: one,
-          height: two,
+          width: cfg.canvasWrapperWidth,
+          height: cfg.canvasWrapperHeight,
           success: (res) => {
             console.log(res)
           },
@@ -542,14 +535,12 @@ Page({
   addphoto: function(event) {
     let pointx = event.detail.x
     let pointy = event.detail.y
-    let one = parseInt(cfg.canvasWidth)
-    let two = parseInt(cfg.canvasHeight)
     wx.canvasGetImageData({
       canvasId: 'myCanvas',
       x: 0,
       y: 0,
-      width: one,
-      height: two,
+      width: cfg.canvasWrapperWidth,
+      height: cfg.canvasWrapperHeight,
       success(res) {
         paintphoto(res.data, pointx, pointy)
       },
