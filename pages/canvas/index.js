@@ -422,7 +422,7 @@ Page({
     let _this = this;
     _this.setData({
       src: options.photoPos,
-      // originPic: '../photos/90.png'
+      originPic: options.photoPos
     })
     wx.createSelectorQuery().select('#canvas').boundingClientRect(function (canvasWrapper) {
       cfg.canvasWrapper = canvasWrapper;

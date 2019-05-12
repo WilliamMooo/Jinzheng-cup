@@ -3,7 +3,7 @@ var arr = [];
 var deal = [];
 const ctx = wx.createCanvasContext('myCanvas')
 
-function indata(data,element){
+function indata(data, element) {
   for (let i = 0; i < data.length; i++) {
     if (data[i] == element) {
       return true
@@ -12,7 +12,7 @@ function indata(data,element){
   return false
 }
 
-function alldone(data){
+function alldone(data) {
   for (let i = 0; i < data.length; i++) {
     if (data[i] == true) {
       return true
@@ -95,7 +95,7 @@ function paintphoto(data, x, y) {
   let picheight = cfg.canvasHeight
   setbrr(data)
   let dx = [0, 0, -1, 1]
-  let dy = [1, -1, 0, 0]  
+  let dy = [1, -1, 0, 0]
   let count = y * width + x
   let head = 0
   let tail = 1
@@ -119,22 +119,22 @@ function paintphoto(data, x, y) {
           xrr[tail] = newx
           yrr[tail] = newy
         }
-        if (data[newcount * 4] == 0 && data[newcount * 4 + 1] == 0 && data[newcount * 4 + 2] == 0){
-          zrr[n] = {x: newx, y: newy}
+        if (data[newcount * 4] == 0 && data[newcount * 4 + 1] == 0 && data[newcount * 4 + 2] == 0) {
+          zrr[n] = { x: newx, y: newy }
           n++
         }
-        if(newx == 0 || newx == width - 1 || newy == 0 || newy == height - 1){
+        if (newx == 0 || newx == width - 1 || newy == 0 || newy == height - 1) {
           zrr[n] = { x: newx, y: newy }
-          n++   
+          n++
         }
       }
     }
   }
   while (head < tail)
-  let left =  []
+  let left = []
   let right = []
   let signal = []
-  for(let i = 0; i < zrr.length; i++){
+  for (let i = 0; i < zrr.length; i++) {
     signal[i] = true
   }
   for (let i = 0; i < zrr.length; i++) {
@@ -162,8 +162,8 @@ function paintphoto(data, x, y) {
           if (min_x > zrr[j].x) {
             min = zrr[j]
             min_x = zrr[j].x
-          } 
-          if(max_x < zrr[j].x){
+          }
+          if (max_x < zrr[j].x) {
             max = zrr[j]
             max_x = zrr[j].x
           }
@@ -196,24 +196,24 @@ function paintphoto(data, x, y) {
   let diry = [-1, -1, -1, 0, 0, 1, 1, 1]
   let restrr = []
   let inrerstrr = false
-  for(let i = 0; i < zrr.length; i++){
-    if(!indata(left,zrr[i]) && !indata(right,zrr[i])){
+  for (let i = 0; i < zrr.length; i++) {
+    if (!indata(left, zrr[i]) && !indata(right, zrr[i])) {
       restrr.push(zrr[i])      // 需要勾勒区域的像素数组
     }
   }
-  let contour =[]
+  let contour = []
   let current = 0
   let continuesignal = true
   let allnotdone = true
   contour.push(restrr[0])
   let currentcount = restrr[0].y * width + restrr[0].x
   let mrr = []
-  for(let i = 0; i < restrr.length; i++){
+  for (let i = 0; i < restrr.length; i++) {
     let count = restrr[0].y * width + restrr[0].x
     mrr[count] = true
     console.log('A')
   }
-  
+
   while (allnotdone) {
     while (continuesignal) {
       continuesignal = false
@@ -230,7 +230,7 @@ function paintphoto(data, x, y) {
           console.log(inrerstrr)
           console.log(mrr[count])
         }
-        
+
         if (inrerstrr && mrr[count]) {
           console.log('A')
           mrr[count] = false
@@ -248,29 +248,28 @@ function paintphoto(data, x, y) {
     ctx.lineTo(contour[0].x, contour[0].y)
     ctx.stroke()
     ctx.draw(true)
-    for(let i = 0; i < contour.length; i++){
+    for (let i = 0; i < contour.length; i++) {
       contour[i] = 0
     }
     allnotdone = alldone(mrr)
   }
-  
+
 
   ctx.save()
   ctx.beginPath()
   ctx.moveTo(left[0].x, left[0].y)
-  for(let i = 1; i < left.length; i++)
-  {
+  for (let i = 1; i < left.length; i++) {
     ctx.lineTo(left[i].x, left[i].y)
   }
   ctx.moveTo(right[0].x, right[0].y)
-  for(let i = 1; i < right.length; i++){
+  for (let i = 1; i < right.length; i++) {
     ctx.lineTo(right[i].x, right[i].y)
   }
   ctx.moveTo(left[0].x, left[0].y)
   ctx.lineTo(right[0].x, right[0].y)
   ctx.stroke()
   ctx.moveTo(left[left.length - 1].x, left[left.length - 1].y)
-  ctx.lineTo(right[right.length - 1].x,right[right.length - 1].y,)
+  ctx.lineTo(right[right.length - 1].x, right[right.length - 1].y)
   ctx.stroke()
   ctx.clip()
   ctx.drawImage('../../image/pop.jpg', 10, 10)
@@ -340,7 +339,7 @@ function cleanthephoto(data) {
       }
       while (head < tail)
       console.log(tail)
-      if (tail <= 5) {
+      if (tail <= 100) {
         for (let m = 1; m <= tail; m++) {
           let x = arr[m]
           data[x] = 0
@@ -365,7 +364,7 @@ Page({
     canvasHeight: 0
   },
 
-  onLoad: function(options) {
+  onLoad: function (options) {
     var _this = this;
     _this.setData({
       src: options.photoPos
@@ -374,9 +373,9 @@ Page({
     _this.setCanvasSize()
   },
 
-  setCanvasSize: function() {
+  setCanvasSize: function () {
     var that = this;
-    wx.createSelectorQuery().select('#scene-editor').boundingClientRect(function(canvasWrapper) {
+    wx.createSelectorQuery().select('#scene-editor').boundingClientRect(function (canvasWrapper) {
       cfg.canvasWrapper = canvasWrapper;
       cfg.canvasWrapperWidth = canvasWrapper.width
       cfg.canvasWrapperHeight = canvasWrapper.height
@@ -388,36 +387,35 @@ Page({
           var originalHeight = cfg.photo.originalHeight = res.height;
           var originalWidth = cfg.photo.originalWidth = res.width;
           if (originalHeight / originalWidth > canvasWrapper.height / canvasWrapper.width) {
-            cfg.canvasHeight = canvasWrapper.height;
-            cfg.canvasWidth = originalWidth * cfg.canvasHeight / originalHeight;
+            cfg.canvasHeight = parseInt(canvasWrapper.height);
+            cfg.canvasWidth = parseInt(originalWidth * cfg.canvasHeight / originalHeight);
           } else {
-            cfg.canvasWidth = canvasWrapper.width;
-            cfg.canvasHeight = originalHeight * cfg.canvasWidth / originalWidth;
+            cfg.canvasWidth = parseInt(canvasWrapper.width);
+            cfg.canvasHeight = parseInt(originalHeight * cfg.canvasWidth / originalWidth);
           }
           that.setData({
             canvasWidth: cfg.canvasWidth,
             canvasHeight: cfg.canvasHeight
           });
+          console.log(cfg)
           that.drawImagescene()
         }
       })
     }).exec();
   },
 
-  drawImagescene: function() {
+  drawImagescene: function () {
     ctx.drawImage(this.data.src, 0, 0, cfg.canvasWidth, cfg.canvasHeight);
     ctx.draw();
   },
 
-  processpic: function() {
-    let one = parseInt(cfg.canvasWidth)
-    let two = parseInt(cfg.canvasHeight)
+  processpic: function () {
     wx.canvasGetImageData({
       canvasId: 'myCanvas',
       x: 0,
       y: 0,
-      width: one,
-      height: two,
+      width: cfg.canvasWrapperWidth,
+      height: cfg.canvasWrapperHeight,
       success(res) {
         const data = convertToGrayscale(res.data)
         wx.canvasPutImageData({
@@ -425,8 +423,8 @@ Page({
           data,
           x: 0,
           y: 0,
-          width: one,
-          height: two,
+          width: cfg.canvasWrapperWidth,
+          height: cfg.canvasWrapperHeight,
           success: (res) => {
             console.log(res)
           },
@@ -441,15 +439,13 @@ Page({
     })
   },
 
-  handlepixel: function() {
-    let one = parseInt(cfg.canvasWidth)
-    let two = parseInt(cfg.canvasHeight)
+  handlepixel: function () {
     wx.canvasGetImageData({
       canvasId: 'myCanvas',
       x: 0,
       y: 0,
-      width: one,
-      height: two,
+      width: cfg.canvasWrapperWidth,
+      height: cfg.canvasWrapperHeight,
       success(res) {
         const data = handlecolor(res.data)
         wx.canvasPutImageData({
@@ -457,8 +453,8 @@ Page({
           data,
           x: 0,
           y: 0,
-          width: one,
-          height: two,
+          width: cfg.canvasWrapperWidth,
+          height: cfg.canvasWrapperHeight,
           success: (res) => {
             console.log(res)
           },
@@ -473,15 +469,13 @@ Page({
     })
   },
 
-  furtherprocess: function() {
-    let one = parseInt(cfg.canvasWidth)
-    let two = parseInt(cfg.canvasHeight)
+  furtherprocess: function () {
     wx.canvasGetImageData({
       canvasId: 'myCanvas',
       x: 0,
       y: 0,
-      width: one,
-      height: two,
+      width: cfg.canvasWrapperWidth,
+      height: cfg.canvasWrapperHeight,
       success(res) {
         const data = cleanthephoto(res.data)
         wx.canvasPutImageData({
@@ -489,8 +483,8 @@ Page({
           data,
           x: 0,
           y: 0,
-          width: one,
-          height: two,
+          width: cfg.canvasWrapperWidth,
+          height: cfg.canvasWrapperHeight,
           success: (res) => {
             console.log(res)
           },
@@ -505,17 +499,15 @@ Page({
     })
   },
 
-  paintcanvas: function(event) {
+  paintcanvas: function (event) {
     let pointx = event.detail.x
     let pointy = event.detail.y
-    let one = parseInt(cfg.canvasWidth)
-    let two = parseInt(cfg.canvasHeight)
     wx.canvasGetImageData({
       canvasId: 'myCanvas',
       x: 0,
       y: 0,
-      width: one,
-      height: two,
+      width: cfg.canvasWrapperWidth,
+      height: cfg.canvasWrapperHeight,
       success(res) {
         const data = fillcolor(res.data, pointx, pointy)
         wx.canvasPutImageData({
@@ -523,8 +515,8 @@ Page({
           data,
           x: 0,
           y: 0,
-          width: one,
-          height: two,
+          width: cfg.canvasWrapperWidth,
+          height: cfg.canvasWrapperHeight,
           success: (res) => {
             console.log(res)
           },
@@ -539,17 +531,15 @@ Page({
     })
   },
 
-  addphoto: function(event) {
+  addphoto: function (event) {
     let pointx = event.detail.x
     let pointy = event.detail.y
-    let one = parseInt(cfg.canvasWidth)
-    let two = parseInt(cfg.canvasHeight)
     wx.canvasGetImageData({
       canvasId: 'myCanvas',
       x: 0,
       y: 0,
-      width: one,
-      height: two,
+      width: cfg.canvasWrapperWidth,
+      height: cfg.canvasWrapperHeight,
       success(res) {
         paintphoto(res.data, pointx, pointy)
       },
@@ -572,11 +562,10 @@ Page({
       title: '图片处理中……',
       mask: true,
       success() {
-        setTimeout(function () {
-          _this.handlepixel()
-          _this.processpic()
-          _this.furtherprocess()
-        }, 100)
+        // setTimeout(function () {
+        //   _this.furtherprocess()
+        //   _this.processpic()
+        // }, 100)
       }
     })
     setTimeout(function () {
