@@ -49,15 +49,16 @@ Page({
             transferSrc(JSON.parse(res.data).img_dataurl).then(data => {
               _this.setData({ src: data })
             })
+            if (!_this.data.first) _this.loadImg()
           }
         })
       }
     })
-    if (!_this.data.first) _this.loadImg()
   },
   
   loadImg: function () {
     const _this = this
+    _this.data.first = false
     wx.navigateTo({
       url: '../preprocessing/index?photoPos=' + _this.data.src,
     })

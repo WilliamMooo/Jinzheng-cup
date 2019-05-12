@@ -566,21 +566,19 @@ Page({
     })
   },
 
-  /**
- * 生命周期函数--监听页面初次渲染完成
- */
   onReady: function (e) {
-    console.log(e)
     const _this = this
     wx.showLoading({
-      title: '加载中……',
-      mask: true
+      title: '图片处理中……',
+      mask: true,
+      success() {
+        setTimeout(function () {
+          _this.handlepixel()
+          _this.processpic()
+          _this.furtherprocess()
+        }, 100)
+      }
     })
-    setTimeout(function(){
-      _this.handlepixel()
-      _this.processpic()
-      _this.furtherprocess()
-    }, 1000)
     setTimeout(function () {
       wx.hideLoading()
     }, 2000)

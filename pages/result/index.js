@@ -23,13 +23,14 @@ Page({
 
   back: function () {
     var _this = this;
+    _this.setData({ src: '' })
     wx.navigateTo({ url: '../index/index' })
   },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    var _this = this;
+    const _this = this
     _this.setData({ src: options.photoPos })
   },
 
@@ -37,7 +38,12 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-
+    const _this = this
+    if (_this.data.src == null || _this.data.src == '') {
+      wx.navigateTo({
+        url: '../index/index',
+      })
+    }
   },
 
   /**
