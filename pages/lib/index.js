@@ -1,14 +1,13 @@
 // pages/lib/index.js
 import transferSrc from '../../utils/base64src.js'
 
-
-
 Page({
   data: {
     imagecollection:['../../image/background2.png','../../image/blackbutton.png','../../image/fire.png'],
     imagesetsize:2,
     a:0,
-    src:''
+    src:'',
+    first: true
   },
 
   leftview:function(){
@@ -18,7 +17,6 @@ Page({
       b = this.data.imagesetsize - 1
     }
     this.setData({a:b})
-    console.log(this.data.imagecollection[this.data.a])
   },
 
   rightview:function(){
@@ -47,15 +45,15 @@ Page({
         })
       }
     })
-
+    if(!_this.data.first) _this.loadImg()
   },
 
   loadImg: function() {
     const _this = this
+    _this.data.first = false
     wx.navigateTo({
-      url: '../canvasTest/index?photoPos=' + _this.data.src,
+      url: '../preprocessing/index?photoPos=' + _this.data.src,
     })
-    _this.data.src = ''
   },
 
   

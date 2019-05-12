@@ -5,16 +5,11 @@ Page({
    * 页面的初始数据
    */
   data: {
-    src: '',
-    originSrc: ''
+    src: ''
   },
 
-  share: function() {
-    
-  },
   save: function () {
     var _this = this
-  
     wx.saveImageToPhotosAlbum({
       filePath : _this.data.src,
       success(res) {
@@ -25,21 +20,17 @@ Page({
       }
     })
   },
+
   back: function () {
     var _this = this;
-    wx.navigateTo({
-      url: '../selectPhoto/index?photoPos=' + _this.data.originSrc,
-    })
+    wx.navigateTo({ url: '../index/index' })
   },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
     var _this = this;
-    _this.setData({
-      src: options.photoPos,
-      originSrc: options.photoPos
-    })
+    _this.setData({ src: options.photoPos })
   },
 
   /**
