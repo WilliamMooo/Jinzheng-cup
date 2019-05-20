@@ -14,14 +14,12 @@ Page{
 
 .firestyle{
   height:50%;
-  margin: 0;
-  padding-top: 9.3%;
-  text-align:center;
+  margin-left:10.4%;
+  margin-top: 9.3%;
 }
 
 .firestyle image{
   height:100%;
-  margin: 0 auto;
 }
 
 .titlestyle{
@@ -30,14 +28,15 @@ Page{
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.leafstyle{
+.leafstyle
+{
   flex-grow:1;
 }
 
 .picstyle{
   width:100%;
-  position:fixed;
-  bottom: 0;
+  margin-top:57.5px;
+  position:absolute;
 }
 
 .buttonclass{
@@ -47,8 +46,4 @@ Page{
   background-color:#000000ef;
   color:#fefefe;
   border-radius: 30px;
-}
-
-.load {
-  display: none;
 }

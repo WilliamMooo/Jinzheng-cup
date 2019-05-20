@@ -2,12 +2,9 @@
 //获取应用实例
 const app = getApp()
 
-import transferSrc from '../../utils/base64src.js'
-
 Page({
   data:{
-    src: '',
-    first: true
+    src: '../../image/fire.png',
   },
 
   start: function () {
@@ -34,7 +31,7 @@ Page({
   },
   
   getPhoto: function () {
-    const _this = this;
+    var _this = this;
     wx.chooseImage({
       count: 1,
       sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
@@ -46,21 +43,16 @@ Page({
           filePath: tempFilePaths[0],
           name: 'image',
           success(res) {
-            transferSrc(JSON.parse(res.data).img_dataurl).then(data => {
-              _this.setData({ src: data })
+            let data = JSON.parse(res.data)
+            _this.setData({
+              src: data.img_dataurl
             })
-            if (!_this.data.first) _this.loadImg()
           }
+        })
+        wx.navigateTo({
+          url: '../canvasTest/index?photoPos=' + _this.data.src,
         })
       }
     })
-  },
-  
-  loadImg: function () {
-    const _this = this
-    _this.data.first = false
-    wx.navigateTo({
-      url: '../preprocessing/index?photoPos=' + _this.data.src,
-    })
-  },
+  }
 })

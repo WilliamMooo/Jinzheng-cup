@@ -5,9 +5,13 @@ Page({
    * 页面的初始数据
    */
   data: {
-    src: ''
+    src: '',
+    originSrc: ''
   },
 
+  share: function() {
+    
+  },
   save: function () {
     var _this = this
     wx.saveImageToPhotosAlbum({
@@ -20,30 +24,35 @@ Page({
       }
     })
   },
-
   back: function () {
     var _this = this;
-    _this.setData({ src: '' })
     wx.navigateTo({ url: '../index/index' })
   },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    const _this = this
-    _this.setData({ src: options.photoPos })
+    var _this = this;
+    if (options.photoPos == '' || options.photoPos == null) {
+      wx.showToast({
+        title: '图片加载失败',
+        icon: 'success'
+      })
+      setTimeout(function () {
+        wx.navigateTo({ url: '../index/index' })
+      }, 1000)
+    }
+    _this.setData({
+      src: options.photoPos,
+      originSrc: options.photoPos
+    })
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-    const _this = this
-    if (_this.data.src == null || _this.data.src == '') {
-      wx.navigateTo({
-        url: '../index/index',
-      })
-    }
+
   },
 
   /**

@@ -8,5 +8,4 @@
     <image src="../../image/background2.png" class="picstyle"></image>
     <button class="buttonclass" bindtap='start' disabled='{{disabled}}'>开始创作吧!</button>
   </view>
-  <image class='load' src='{{src}}' bindload='loadImg'></image>
 </view>

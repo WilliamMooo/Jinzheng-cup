@@ -73,7 +73,3 @@ Page{
   color:#fefefe;
   border-radius: 30px;
 }
-
-.load {
-  display: none;
-}

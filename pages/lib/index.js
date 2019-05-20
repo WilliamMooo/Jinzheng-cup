@@ -1,13 +1,10 @@
 // pages/lib/index.js
-import transferSrc from '../../utils/base64src.js'
-
 Page({
   data: {
     imagecollection:['../../image/background2.png','../../image/blackbutton.png','../../image/fire.png'],
     imagesetsize:2,
     a:0,
-    src:'',
-    first: true
+    test:''
   },
 
   leftview:function(){
@@ -17,6 +14,7 @@ Page({
       b = this.data.imagesetsize - 1
     }
     this.setData({a:b})
+    console.log(this.data.imagecollection[this.data.a])
   },
 
   rightview:function(){
@@ -28,35 +26,21 @@ Page({
     this.setData({ a: b })
   },
 
-  next:function() {
-    const _this = this;
-    const photoPath = _this.data.imagecollection[this.data.a]
+  OnTouchGo:function(){
+    let photoPath = this.data.imagecollection[this.data.a]
+    console.log(photoPath)
     wx.request({
       url: 'https://jzb.deeract.com/api/photograph',
-      method: 'POST',
-      header: { 'content-type': 'application/json' },
-      data: {
-        'name': 'image',
-        'image_url': photoPath
-      },
+      data: { 'img_dataurl': photoPath },
+      header: { 'content-type': 'multipart/form-data' },
       success(res) {
-        transferSrc(res.data.img_dataurl).then( data =>  {
-          _this.setData({ src: data })
-        })
+        console.log(res.data)
       }
     })
-    if(!_this.data.first) _this.loadImg()
+    // wx.navigateTo({
+    //   url: '../canvasTest/index?photoPos=' + photoPath,
+    // })
   },
-
-  loadImg: function() {
-    const _this = this
-    _this.data.first = false
-    wx.navigateTo({
-      url: '../preprocessing/index?photoPos=' + _this.data.src,
-    })
-  },
-
-  
 
   /**
  * 生命周期函数--监听页面加载
@@ -65,13 +49,15 @@ Page({
     let _this = this;
     wx.request({
       url: 'https://jzb.deeract.com/api/gallery',
-      header: { 'content-type': 'application/json' },
+      header: {
+        'content-type': 'application/json'
+      },
       method: 'GET',
       success(res) {
         _this.setData({
-          imagecollection: res.data,
-          imagesetsize: res.data.length,
+          imagecollection: res.data
         })
+        console.log(res.data)
       }
     })
   },
