@@ -69,7 +69,11 @@ Page{
   margin-left:21%;
   margin-right:21%;
   margin-top:40px;
-  background-color:#000000ef;
+  background-color:#000000;
   color:#fefefe;
   border-radius: 30px;
+}
+
+.load {
+  display: none;
 }

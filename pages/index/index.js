@@ -2,20 +2,21 @@
 //获取应用实例
 const app = getApp()
 
+import transferSrc from '../../utils/base64src.js'
+
 Page({
   data:{
-    src: '../../image/fire.png',
+    src: null,
+    first: true,
+    tip: '开始制作吧！',
+    disable: false
   },
 
   start: function () {
-    var _this = this;
+    const _this = this;
     wx.showActionSheet({
       itemList: ['从素材库中选择', '从相册选择'],
       success(res) {
-        _this.setData({
-          disable: true,
-          tip: "加载中……"
-        })
         if (res.tapIndex) {
           _this.getPhoto();
         } else {
@@ -31,28 +32,41 @@ Page({
   },
   
   getPhoto: function () {
-    var _this = this;
+    const _this = this;
     wx.chooseImage({
       count: 1,
       sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
       sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
       success: function (res) {
+        _this.setData({
+          disable: true,
+          tip: "加载中……"
+        })
         const tempFilePaths = res.tempFilePaths
         wx.uploadFile({
           url: 'https://jzb.deeract.com/api/photograph',
           filePath: tempFilePaths[0],
           name: 'image',
           success(res) {
-            let data = JSON.parse(res.data)
-            _this.setData({
-              src: data.img_dataurl
+            transferSrc(JSON.parse(res.data).img_dataurl).then(data => {
+              _this.setData({ src: data })
             })
+            if (!_this.data.first) _this.loadImg()
           }
-        })
-        wx.navigateTo({
-          url: '../canvasTest/index?photoPos=' + _this.data.src,
         })
       }
     })
-  }
+  },
+  
+  loadImg: function () {
+    const _this = this
+    _this.setData({
+      disable: false,
+      tip: "开始制作吧！",
+      first: false
+    })
+    wx.navigateTo({
+      url: '../preprocessing/index?photoPos=' + _this.data.src,
+    })
+  },
 })

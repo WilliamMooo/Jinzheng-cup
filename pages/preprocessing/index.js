@@ -1,15 +1,53 @@
 var brr = [];
+var crr = [];
 var arr = [];
 var deal = [];
 const ctx = wx.createCanvasContext('myCanvas')
 
-function indata(data, element) {
-  for (let i = 0; i < data.length; i++) {
-    if (data[i] == element) {
-      return true
+function searchedge(data, line) {
+
+  let width = cfg.canvasWrapperWidth
+  let height = cfg.canvasWrapperHeight
+  // dir 0 => 上 1=> 右 2=> 下  3=> 左 
+  let dir = 0
+  let movex = [-1, 0, 1, 0]
+  let movey = [0, -1, 0, 1]
+  console.log(line[0])
+
+  let current = 0
+  while (true) {
+    let point = line[current]
+    let find = false
+    for (let i = 0; i < 4; i++) {
+      var newx = point.x + movex[(i + dir) % 4]
+      var newy = point.y + movey[(i + dir) % 4]
+      var newcount = newy * width + newx
+      if (newx >= 0 && newx < width && newy >= 0 && newy < height && crr[newcount * 4]) {
+        crr[newcount * 4] = false
+        if (judgeEdage(data, newx, newy)) {
+          dir = (dir + i + 3) % 4
+          line.push({ x: newx, y: newy })
+          break;
+        }
+      }
+    }
+    current++;
+    if (current >= line.length) {
+      console.log(line[current - 1])
+      break;
     }
   }
-  return false
+  return line
+}
+
+function drawOutline(path, direction) {
+  console.log(direction)
+  let tmpPath = direction ? path : path.reverse()
+  ctx.moveTo(tmpPath[0].x, tmpPath[0].y)
+  for (let i = 1, length = tmpPath.length; i < length; i++)
+    ctx.lineTo(tmpPath[i].x, tmpPath[i].y)
+  // ctx.lineTo(tmpPath[0].x, tmpPath[0].y)
+  return;
 }
 
 function alldone(data) {
@@ -88,191 +126,80 @@ function fillcolor(data, x, y) {
   return data
 };
 
+function judgeEdage(data, x, y) {
+  let dirx = [-1, 0, 1, -1, 1, -1, 0, 1]
+  let diry = [-1, -1, -1, 0, 0, 1, 1, 1]
+  let preIndex = y * cfg.canvasWidth + x
+  if (data[preIndex * 4] === 0 && data[preIndex * 4 + 1] === 0 && data[preIndex * 4 + 2] === 0)
+    return false
+  for (let i = 0; i < 8; i++) {
+    let nextX = x + dirx[i];
+    let nextY = y + diry[i];
+    let index = nextY * cfg.canvasWidth + nextX
+    if (nextX === 0 || nextY === 0 || nextX === cfg.canvasWidth - 1 || nextY === cfg.canvasHeight - 1)
+      return true;
+    if (data[index * 4] === 0 && data[index * 4 + 1] === 0 && data[index * 4 + 2] === 0)
+      return true
+  }
+  return false
+}
+
 function paintphoto(data, x, y) {
-  let width = cfg.canvasWrapperWidth
-  let height = cfg.canvasWrapperHeight
-  let picwidth = cfg.canvasWidth
-  let picheight = cfg.canvasHeight
+  let width = cfg.canvasWidth
+  let height = cfg.canvasHeight
   setbrr(data)
-  let dx = [0, 0, -1, 1]
-  let dy = [1, -1, 0, 0]
+  setcrr(data)
+  let dx = [1, 0, -1, 0]
+  let dy = [0, -1, 0, 1]
+  let allPath = []
+  let xrr = [x]
+  let yrr = [y]
   let count = y * width + x
-  let head = 0
-  let tail = 1
-  let zrr = []
-  let n = 0
-  let xrr = []
-  let yrr = []
-  xrr[1] = x
-  yrr[1] = y
   brr[count * 4] = false
-  do {
-    head++
+  crr[count * 4] = false
+  let head = 0, tail = 1;
+  while (head < tail) {
     for (let i = 0; i < dx.length; i++) {
       var newx = xrr[head] + dx[i]
       var newy = yrr[head] + dy[i]
       var newcount = newy * width + newx
-      if (newx >= 0 && newx < width && newy >= 0 && newy < height && brr[newcount * 4]) {
+      if (newx >= 0 && newx < width && newy >= 0 && newy < height && brr[newcount * 4] && (data[newcount * 4] !== 0 || data[newcount * 4 + 1] != 0 || data[newcount * 4 + 2] !== 0) && crr[newcount * 4]) {
         brr[newcount * 4] = false
-        if (data[newcount * 4] == 255 && data[newcount * 4 + 1] == 255 && data[newcount * 4 + 2] == 255) {
-          tail++
-          xrr[tail] = newx
-          yrr[tail] = newy
-        }
-        if (data[newcount * 4] == 0 && data[newcount * 4 + 1] == 0 && data[newcount * 4 + 2] == 0) {
-          zrr[n] = { x: newx, y: newy }
-          n++
-        }
-        if (newx == 0 || newx == width - 1 || newy == 0 || newy == height - 1) {
-          zrr[n] = { x: newx, y: newy }
-          n++
+        xrr.push(newx)
+        yrr.push(newy)
+        tail++;
+        let point = judgeEdage(data, newx, newy)
+        if (point && crr[newcount * 4]) {
+          crr[newcount * 4] = false
+          allPath.push(searchedge(data, [{ x: newx, y: newy }]))
         }
       }
     }
+    head++
   }
-  while (head < tail)
-  let left = []
-  let right = []
-  let signal = []
-  for (let i = 0; i < zrr.length; i++) {
-    signal[i] = true
-  }
-  for (let i = 0; i < zrr.length; i++) {
-    for (let j = i; j < zrr.length; j++) {
-      if (zrr[i].y > zrr[j].y) {
-        let miny = zrr[j].y;
-        let excx = zrr[j].x;
-        zrr[j].y = zrr[i].y;
-        zrr[j].x = zrr[i].x;
-        zrr[i].y = miny;
-        zrr[i].x = excx;
-      }
+  console.log(allPath)
+  let maxPathLength = -1, maxPathPosi = -1
+  for (let index = 0, length = allPath.length; index < length; index++)
+    if (maxPathLength < allPath[index].length) {
+      maxPathPosi = index;
+      maxPathLength = allPath[index].length
     }
-  }
-  for (let i = 0; i < zrr.length; i++) {
-    if (signal[i] == true) {
-      signal[i] = false
-      let max_x = zrr[i].x
-      let min_x = zrr[i].x
-      let max = zrr[i]
-      let min = zrr[i]
-      for (let j = i + 1; j < zrr.length; j++) {
-        if (zrr[i].y == zrr[j].y) {
-          signal[j] = false
-          if (min_x > zrr[j].x) {
-            min = zrr[j]
-            min_x = zrr[j].x
-          }
-          if (max_x < zrr[j].x) {
-            max = zrr[j]
-            max_x = zrr[j].x
-          }
-        }
-      }
-      left.push(min)
-      right.push(max)
-    }
-  }
-  console.log(left)
-  console.log(right)
-  ctx.moveTo(left[0].x, left[0].y)
-  for (let i = 1; i < left.length; i++) {
-    ctx.lineTo(left[i].x, left[i].y)
-  }
-  ctx.moveTo(right[0].x, right[0].y)
-  for (let i = 1; i < right.length; i++) {
-    ctx.lineTo(right[i].x, right[i].y)
-  }
-  ctx.moveTo(left[0].x, left[0].y)
-  ctx.lineTo(right[0].x, right[0].y)
-  ctx.stroke()
-  ctx.moveTo(left[left.length - 1].x, left[left.length - 1].y)
-  ctx.lineTo(right[right.length - 1].x, right[right.length - 1].y)
-  ctx.stroke()
-  ctx.draw(true)    // 整体边框勾勒完成
-
-  // 勾勒内部区域
-  let dirx = [-1, 0, 1, -1, 1, -1, 0, 1]
-  let diry = [-1, -1, -1, 0, 0, 1, 1, 1]
-  let restrr = []
-  let inrerstrr = false
-  for (let i = 0; i < zrr.length; i++) {
-    if (!indata(left, zrr[i]) && !indata(right, zrr[i])) {
-      restrr.push(zrr[i])      // 需要勾勒区域的像素数组
-    }
-  }
-  let contour = []
-  let current = 0
-  let continuesignal = true
-  let allnotdone = true
-  contour.push(restrr[0])
-  let currentcount = restrr[0].y * width + restrr[0].x
-  let mrr = []
-  for (let i = 0; i < restrr.length; i++) {
-    let count = restrr[0].y * width + restrr[0].x
-    mrr[count] = true
-    console.log('A')
-  }
-
-  while (allnotdone) {
-    while (continuesignal) {
-      continuesignal = false
-      for (let i = 0; i < dirx.length; i++) {
-        let newx = contour[current].x + dirx[i]
-        let newy = contour[current].y + diry[i]
-        if (newx >= 0 && newx < picwidth && newy >= 0 && newy < picheight) {
-          let count = newy * width + newx
-          for (let p = 0; p < restrr.length; p++) {
-            if (restrr[p].x == newx && restrr[p].y == newy) {
-              inrerstrr = true
-            }
-          }
-          console.log(inrerstrr)
-          console.log(mrr[count])
-        }
-
-        if (inrerstrr && mrr[count]) {
-          console.log('A')
-          mrr[count] = false
-          contour.push(element)
-          continuesignal = true
-          current++
-          break
-        }
-      }
-    }
-    ctx.moveTo(contour[0].x, contour[0].y)
-    for (let i = 1; i < contour.length; i++) {
-      ctx.lineTo(contour[i].x, contour[i].y)
-    }
-    ctx.lineTo(contour[0].x, contour[0].y)
-    ctx.stroke()
-    ctx.draw(true)
-    for (let i = 0; i < contour.length; i++) {
-      contour[i] = 0
-    }
-    allnotdone = alldone(mrr)
-  }
-
 
   ctx.save()
   ctx.beginPath()
-  ctx.moveTo(left[0].x, left[0].y)
-  for (let i = 1; i < left.length; i++) {
-    ctx.lineTo(left[i].x, left[i].y)
+  for (let index = 0, length = allPath.length; index < length; index++) {
+    if (index === maxPathPosi)
+      drawOutline(allPath[index], false)
+    else
+      drawOutline(allPath[index], true)
   }
-  ctx.moveTo(right[0].x, right[0].y)
-  for (let i = 1; i < right.length; i++) {
-    ctx.lineTo(right[i].x, right[i].y)
-  }
-  ctx.moveTo(left[0].x, left[0].y)
-  ctx.lineTo(right[0].x, right[0].y)
-  ctx.stroke()
-  ctx.moveTo(left[left.length - 1].x, left[left.length - 1].y)
-  ctx.lineTo(right[right.length - 1].x, right[right.length - 1].y)
-  ctx.stroke()
+  ctx.closePath()
+  // ctx.setStrokeStyle('blue')
+  // ctx.stroke()
   ctx.clip()
-  ctx.drawImage('../../image/pop.jpg', 10, 10)
+  // ctx.setFillStyle('blue')
+  // ctx.fill()
+  ctx.drawImage('../../image/pop.jpg', 0, 0)
   ctx.restore()
   ctx.draw(true)
 };
@@ -280,6 +207,12 @@ function paintphoto(data, x, y) {
 function setbrr(data) {
   for (let i = 0; i < data.length; i += 4) {
     brr[i] = true
+  }
+};
+
+function setcrr(data) {
+  for (let i = 0; i < data.length; i += 4) {
+    crr[i] = true
   }
 };
 
@@ -338,8 +271,7 @@ function cleanthephoto(data) {
         }
       }
       while (head < tail)
-      console.log(tail)
-      if (tail <= 100) {
+      if (tail <= 120) {
         for (let m = 1; m <= tail; m++) {
           let x = arr[m]
           data[x] = 0
@@ -375,33 +307,27 @@ Page({
 
   setCanvasSize: function () {
     var that = this;
-    wx.createSelectorQuery().select('#scene-editor').boundingClientRect(function (canvasWrapper) {
-      cfg.canvasWrapper = canvasWrapper;
-      cfg.canvasWrapperWidth = canvasWrapper.width
-      cfg.canvasWrapperHeight = canvasWrapper.height
-      wx.getImageInfo({
-        src: that.data.src,
-        success(res) {
-          console.log(res)
-          cfg.photo.path = res.path;
-          var originalHeight = cfg.photo.originalHeight = res.height;
-          var originalWidth = cfg.photo.originalWidth = res.width;
-          if (originalHeight / originalWidth > canvasWrapper.height / canvasWrapper.width) {
-            cfg.canvasHeight = parseInt(canvasWrapper.height);
-            cfg.canvasWidth = parseInt(originalWidth * cfg.canvasHeight / originalHeight);
-          } else {
-            cfg.canvasWidth = parseInt(canvasWrapper.width);
-            cfg.canvasHeight = parseInt(originalHeight * cfg.canvasWidth / originalWidth);
-          }
-          that.setData({
-            canvasWidth: cfg.canvasWidth,
-            canvasHeight: cfg.canvasHeight
-          });
-          console.log(cfg)
-          that.drawImagescene()
-        }
-      })
-    }).exec();
+    let { windowWidth } = wx.getSystemInfoSync()
+    wx.getImageInfo({
+      src: that.data.src,
+      success(res) {
+        console.log(res)
+        cfg.photo.path = res.path;
+        var originalHeight = cfg.photo.originalHeight = res.height;
+        var originalWidth = cfg.photo.originalWidth = res.width;
+        let rate = originalHeight / originalWidth
+        cfg.canvasWidth = windowWidth
+        cfg.canvasHeight = parseInt(windowWidth * rate)
+        cfg.canvasWrapperWidth = cfg.canvasWidth
+        cfg.canvasWrapperHeight = cfg.canvasHeight
+        console.log(cfg)
+        that.setData({
+          canvasWidth: cfg.canvasWidth,
+          canvasHeight: cfg.canvasHeight
+        });
+        that.drawImagescene()
+      }
+    })
   },
 
   drawImagescene: function () {
@@ -414,8 +340,8 @@ Page({
       canvasId: 'myCanvas',
       x: 0,
       y: 0,
-      width: cfg.canvasWrapperWidth,
-      height: cfg.canvasWrapperHeight,
+      width: cfg.canvasWidth,
+      height: cfg.canvasHeight,
       success(res) {
         const data = convertToGrayscale(res.data)
         wx.canvasPutImageData({
@@ -423,8 +349,8 @@ Page({
           data,
           x: 0,
           y: 0,
-          width: cfg.canvasWrapperWidth,
-          height: cfg.canvasWrapperHeight,
+          width: cfg.canvasWidth,
+          height: cfg.canvasHeight,
           success: (res) => {
             console.log(res)
           },
@@ -444,8 +370,8 @@ Page({
       canvasId: 'myCanvas',
       x: 0,
       y: 0,
-      width: cfg.canvasWrapperWidth,
-      height: cfg.canvasWrapperHeight,
+      width: cfg.canvasWidth,
+      height: cfg.canvasHeight,
       success(res) {
         const data = handlecolor(res.data)
         wx.canvasPutImageData({
@@ -453,8 +379,8 @@ Page({
           data,
           x: 0,
           y: 0,
-          width: cfg.canvasWrapperWidth,
-          height: cfg.canvasWrapperHeight,
+          width: cfg.canvasWidth,
+          height: cfg.canvasHeight,
           success: (res) => {
             console.log(res)
           },
@@ -474,17 +400,17 @@ Page({
       canvasId: 'myCanvas',
       x: 0,
       y: 0,
-      width: cfg.canvasWrapperWidth,
-      height: cfg.canvasWrapperHeight,
-      success(res) {
+      width: cfg.canvasWidth,
+      height: cfg.canvasHeight,
+      success: (res) =>  {
         const data = cleanthephoto(res.data)
         wx.canvasPutImageData({
           canvasId: 'myCanvas',
           data,
           x: 0,
           y: 0,
-          width: cfg.canvasWrapperWidth,
-          height: cfg.canvasWrapperHeight,
+          width: cfg.canvasWidth,
+          height: cfg.canvasHeight,
           success: (res) => {
             console.log(res)
           },
@@ -492,6 +418,7 @@ Page({
             console.error(err)
           }
         })
+        this.processpic()
       },
       fail: (err) => {
         console.error(err)
@@ -506,8 +433,8 @@ Page({
       canvasId: 'myCanvas',
       x: 0,
       y: 0,
-      width: cfg.canvasWrapperWidth,
-      height: cfg.canvasWrapperHeight,
+      width: cfg.canvasWidth,
+      height: cfg.canvasHeight,
       success(res) {
         const data = fillcolor(res.data, pointx, pointy)
         wx.canvasPutImageData({
@@ -515,8 +442,8 @@ Page({
           data,
           x: 0,
           y: 0,
-          width: cfg.canvasWrapperWidth,
-          height: cfg.canvasWrapperHeight,
+          width: cfg.canvasWidth,
+          height: cfg.canvasHeight,
           success: (res) => {
             console.log(res)
           },
@@ -538,8 +465,8 @@ Page({
       canvasId: 'myCanvas',
       x: 0,
       y: 0,
-      width: cfg.canvasWrapperWidth,
-      height: cfg.canvasWrapperHeight,
+      width: cfg.canvasWidth,
+      height: cfg.canvasHeight,
       success(res) {
         paintphoto(res.data, pointx, pointy)
       },
@@ -549,10 +476,16 @@ Page({
     })
   },
 
-  next: function() {
+  next: function () {
     const _this = this
-    wx.navigateTo({
-      url: '../canvas/index?photoPos=' + _this.data.src,
+    wx.canvasToTempFilePath({
+      canvasId: 'myCanvas',
+      success(res) {
+        const finalSrc = res.tempFilePath
+        wx.navigateTo({
+          url: '../canvas/index?photoPos=' + finalSrc,
+        })
+      }
     })
   },
 
@@ -562,14 +495,15 @@ Page({
       title: '图片处理中……',
       mask: true,
       success() {
-        // setTimeout(function () {
-        //   _this.furtherprocess()
-        //   _this.processpic()
-        // }, 100)
+        setTimeout(function () {
+          _this.furtherprocess()
+        }, 1000)
       }
     })
     setTimeout(function () {
       wx.hideLoading()
-    }, 2000)
+      _this.next()
+    }, 2500)
   },
+
 })

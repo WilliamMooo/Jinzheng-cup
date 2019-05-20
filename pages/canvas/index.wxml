@@ -4,13 +4,21 @@
       <color-picker data-id="3" class="color-picker" colorData="{{colorData}}" rpxRatio="{{rpxRatio}}" bindchangecolor="onChangeColor"></color-picker>
     </view>
     </view>
+    <!-- 遮罩层 -->
+<cover-view class="mask" catchtouchmove="preventTouchMove" wx:if="{{showModal}}"></cover-view>
+<!-- 弹出层 -->
+<cover-view class="modalDlg" wx:if="{{showModal}}">
+    <cover-image src="{{originPic}}" mode='aspectFit'></cover-image>
+    <cover-view bindtap="ok" class="ok">好的</cover-view>
+</cover-view>
 <view class="pages">
+
   <view class="top">
-    <image src="{{logo[0]}}" class="buttonlogo1" mode="widthFix" bindtap='redraw'></image>
-    <image src="{{logo[1]}}" class="buttonlogo2" mode="widthFix" bindtap='next'></image>
+    <!--image src="{{logo[0]}}" class="buttonlogo1" mode="widthFix" bindtap='redraw'></image-->
+    <!--image src="{{logo[1]}}" class="buttonlogo2" mode="widthFix" bindtap='next'></image-->
   </view>
   <view class="drawArea">
-    <canvas class="myCanvas" disable-scroll="true" canvas-id="myCanvas"  bindtouchend='fillColor' bindtouchstart='drawrevoke'></canvas>
+    <canvas id="canvas" class="myCanvas" disable-scroll="true" canvas-id="myCanvas"  bindtouchend='handleDraw' bindtouchstart='getColor' bindtouchmove='touchMove' style="width: {{canvasWidth}}px; height: {{canvasHeight}}px;"></canvas>
   </view>
   <view class="colorboard">
    <swiper class='swiper1' display-multiple-items='{{6}}' >
@@ -22,11 +30,19 @@
    <view class="colorItem1" style="background:{{currentColor}}" >
    </view>
    </swiper-item>
-   </swiper>
+   <swiper-item    bindtap="isPencil"> 
+   <view class="pencil" >
+   </view>
+   </swiper-item>
+    <swiper-item    bindtap="isClear"> 
+   <view class="whitepencil" >
+   </view>
+   </swiper-item>
+    </swiper>
   </view>
   <view class="bottom">
-    <image src='../photos/search.svg' ></image>
-    <image src='../photos/logoword.svg'></image>
-    <image src='../photos/logocheck.svg' ></image>
+    <image src='../photos/search.svg' bindtap="btn" ></image>
+    <image src='../photos/logocheck.svg' bindtap="choosePic"></image>
+    <image src="{{logo[1]}}"  bindtap='next'></image>
   </view>
 </view>

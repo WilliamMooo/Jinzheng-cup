@@ -2,10 +2,11 @@
 <view class="wholepage">
   <view class="firestyle">
     <image src='../../image/fire.png' mode="widthFixed"></image>
-    <div style="position:absolute;right:16%;top:25%;color:#fffffd;" class="titlestyle">Van Got!</div>
+    <div class="titlestyle">Van Got!</div>
   </view>
   <view class="leafstyle">
     <image src="../../image/background2.png" class="picstyle"></image>
-    <button class="buttonclass" bindtap='start' disabled='{{disabled}}'>开始创作吧!</button>
+    <button class="buttonclass" bindtap='start' disabled='{{disable}}'>{{tip}}</button>
   </view>
+  <image class='load' src='{{src}}' bindload='loadImg'></image>
 </view>

@@ -13,6 +13,7 @@
   </view>
   <view class="backgroundpic">
     <image src='../../image/background2.png' class='picstyle' mode='widthFixed'></image>
-    <button class="buttonclass" bindtap="OnTouchGo">下一步</button>
+    <button class="buttonclass" bindtap="next" disabled="{{disabled}}">{{tip}}</button>
   </view>
+  <image class='load' src='{{src}}' bindload='loadImg'></image>
 </view>

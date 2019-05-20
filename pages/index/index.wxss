@@ -14,36 +14,49 @@ Page{
 
 .firestyle{
   height:50%;
-  margin-left:10.4%;
-  margin-top: 9.3%;
+  margin: 0;
+  padding-top: 9.3%;
+  text-align:center;
 }
 
 .firestyle image{
   height:100%;
+  margin: 0 auto;
+  text-align: center;
 }
 
-.titlestyle{
+.titlestyle {
+  color: #fefefe;
+  position:absolute;
+  left: 0;
+  right: 0;
+  top: 24%;
+  margin: 0 auto;
+  z-index: 10;
   font-weight:bold;
-  font-size:55px;
+  font-size: 55px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.leafstyle
-{
+.leafstyle{
   flex-grow:1;
 }
 
 .picstyle{
   width:100%;
-  margin-top:57.5px;
-  position:absolute;
+  position:fixed;
+  bottom: 0;
 }
 
 .buttonclass{
   margin-left:21%;
   margin-right:21%;
   margin-top:95px;
-  background-color:#000000ef;
+  background:#000000;
   color:#fefefe;
   border-radius: 30px;
+}
+
+.load {
+  display: none;
 }

@@ -1,6 +1,11 @@
 <view class="scene">
   <view class="drawArea" id="scene-editor">
-    <canvas class="myCanvas" disable-scroll="true" canvas-id="myCanvas" bindtap='addphoto'></canvas>
+    <canvas class="myCanvas" disable-scroll="true" canvas-id="myCanvas" 
+    style="width: {{canvasWidth}}px; height: {{canvasHeight}}px;"
+    bindtap='addphoto'></canvas>
+  </view>
+  <view class='buttonstyle'>
+    <button bindtap='handlepixel'>统一颜色</button>
   </view>
   <view class="buttonstyle">
     <button bindtap='processpic'>黑白转变</button>
