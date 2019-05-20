@@ -191,7 +191,6 @@ function paintphoto(data, x, y) {
      maxPathLength = allPath[index].length
    }
 
- ctx.save()
  ctx.beginPath()
  for(let index = 0, length = allPath.length; index < length; index ++){
    if(index === maxPathPosi)
@@ -200,15 +199,15 @@ function paintphoto(data, x, y) {
      drawOutline(allPath[index], true)
  }
  ctx.closePath()
- // ctx.setStrokeStyle('blue')
- // ctx.stroke()
+//  ctx.setStrokeStyle('blue')
+ ctx.stroke()
+ ctx.save()
  ctx.clip()
- // ctx.setFillStyle('blue')
- // ctx.fill()
- console.log(chooseImageSrc)
- ctx.drawImage(chooseImageSrc,0,0)
- ctx.restore()
+//  // ctx.setFillStyle('blue')
+//  ctx.fill()
+ ctx.drawImage(chooseImageSrc,0,0, cfg.canvasWidth, cfg.canvasHeight)
  ctx.draw(true)
+ ctx.restore()
 };
 
 function searchedge(data, line){
@@ -476,11 +475,11 @@ Page({
 
     if (this.data.isclear) {
       ctx.setStrokeStyle('#ffffff');
-      ctx.setLineWidth(5);
+      ctx.setLineWidth(3);
     }
     else {
       ctx.setStrokeStyle('#000000');
-      ctx.setLineWidth(2);
+      ctx.setLineWidth(1);
     }
 
     ctx.setLineCap('round');
@@ -615,7 +614,7 @@ Page({
     let _this = this;
     _this.setData({
       src: options.photoPos,
-      originPic: options.photoPos
+      originPic: options.originImage
     })
     let {windowWidth} = wx.getSystemInfoSync()
     wx.getImageInfo({
@@ -638,7 +637,7 @@ Page({
         _this.drawImagescene()
       }
     })
-    _this.drawImagescene()
+    // _this.drawImagescene()
   },
 
   /**

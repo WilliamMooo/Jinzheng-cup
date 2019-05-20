@@ -22,7 +22,7 @@
   </view>
   <view class="colorboard">
    <swiper class='swiper1' display-multiple-items='{{6}}' >
-   <swiper-item    wx:for="{{numOfColor}}" bindtap="currentcolor" data-index="{{index}}"> 
+   <swiper-item item-id='{{index}}'   wx:for="{{numOfColor}}" bindtap="currentcolor" data-index="{{index}}"> 
    <view class="colorItem" style="background:{{itemcolor[index]}}" >
    </view>
    </swiper-item>

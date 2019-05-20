@@ -271,7 +271,7 @@ function cleanthephoto(data) {
         }
       }
       while (head < tail)
-      if (tail <= 120) {
+      if (tail <= 50) {
         for (let m = 1; m <= tail; m++) {
           let x = arr[m]
           data[x] = 0
@@ -287,7 +287,7 @@ function cleanthephoto(data) {
 var cfg = {
   photo: {}
 };
-
+let originImage = ''
 Page({
   data: {
     src: '../../image/pic1.jpg',
@@ -295,14 +295,20 @@ Page({
     canvasWidth: 0,
     canvasHeight: 0
   },
-
   onLoad: function (options) {
     var _this = this;
     _this.setData({
       src: options.photoPos
     })
-    console.log(_this.data.src)
-    _this.setCanvasSize()
+    originImage = options.originImage
+    wx.showLoading({
+      title: '图片处理中',
+      mask: true,
+      success() {
+        _this.setCanvasSize()
+      }
+    })
+
   },
 
   setCanvasSize: function () {
@@ -333,9 +339,14 @@ Page({
   drawImagescene: function () {
     ctx.drawImage(this.data.src, 0, 0, cfg.canvasWidth, cfg.canvasHeight);
     ctx.draw();
+    let _this = this
+    setTimeout(function(){
+      _this.furtherprocess()
+    },1000)
   },
 
   processpic: function () {
+    let _this = this
     wx.canvasGetImageData({
       canvasId: 'myCanvas',
       x: 0,
@@ -353,6 +364,9 @@ Page({
           height: cfg.canvasHeight,
           success: (res) => {
             console.log(res)
+            wx.hideLoading()
+            _this.next()
+            // _this.furtherprocess()
           },
           fail: (err) => {
             console.error(err)
@@ -396,6 +410,7 @@ Page({
   },
 
   furtherprocess: function () {
+    let _this = this
     wx.canvasGetImageData({
       canvasId: 'myCanvas',
       x: 0,
@@ -413,12 +428,12 @@ Page({
           height: cfg.canvasHeight,
           success: (res) => {
             console.log(res)
+            _this.processpic()
           },
           fail: (err) => {
             console.error(err)
           }
         })
-        this.processpic()
       },
       fail: (err) => {
         console.error(err)
@@ -435,7 +450,7 @@ Page({
       y: 0,
       width: cfg.canvasWidth,
       height: cfg.canvasHeight,
-      success(res) {
+      success: (res) =>  {
         const data = fillcolor(res.data, pointx, pointy)
         wx.canvasPutImageData({
           canvasId: 'myCanvas',
@@ -482,28 +497,11 @@ Page({
       canvasId: 'myCanvas',
       success(res) {
         const finalSrc = res.tempFilePath
+        console.log(finalSrc)
         wx.navigateTo({
-          url: '../canvas/index?photoPos=' + finalSrc,
+          url: '../canvas/index?photoPos=' + finalSrc+ '&originImage=' + originImage,
         })
       }
     })
-  },
-
-  onReady: function (e) {
-    const _this = this
-    wx.showLoading({
-      title: '图片处理中……',
-      mask: true,
-      success() {
-        setTimeout(function () {
-          _this.furtherprocess()
-        }, 1000)
-      }
-    })
-    setTimeout(function () {
-      wx.hideLoading()
-      _this.next()
-    }, 2500)
-  },
-
+  }
 })
