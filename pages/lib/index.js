@@ -1,6 +1,6 @@
 // pages/lib/index.js
 import transferSrc from '../../utils/base64src.js'
-
+let originImage = ''
 Page({
   data: {
     imagecollection:['../../image/background2.png','../../image/blackbutton.png','../../image/fire.png'],
@@ -37,6 +37,7 @@ Page({
       tip: '加载中...'
     })
     const photoPath = _this.data.imagecollection[this.data.a]
+    originImage = photoPath
     wx.request({
       url: 'https://jzb.deeract.com/api/photograph',
       method: 'POST',
@@ -58,7 +59,7 @@ Page({
     const _this = this
     _this.data.first = false
     wx.navigateTo({
-      url: '../preprocessing/index?photoPos=' + _this.data.src,
+      url: '../preprocessing/index?photoPos=' + _this.data.src + '&originImage=' + originImage,
     })
     _this.setData({
       disable: false,

@@ -1,7 +1,7 @@
 //index.js
 //获取应用实例
 const app = getApp()
-
+let originImage
 import transferSrc from '../../utils/base64src.js'
 
 Page({
@@ -43,6 +43,7 @@ Page({
           tip: "加载中……"
         })
         const tempFilePaths = res.tempFilePaths
+        originImage = tempFilePaths[0]
         wx.uploadFile({
           url: 'https://jzb.deeract.com/api/photograph',
           filePath: tempFilePaths[0],
@@ -66,7 +67,7 @@ Page({
       first: false
     })
     wx.navigateTo({
-      url: '../preprocessing/index?photoPos=' + _this.data.src,
+      url: '../preprocessing/index?photoPos=' + _this.data.src + '&originImage=' + originImage,
     })
   },
 })

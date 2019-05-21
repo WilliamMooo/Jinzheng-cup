@@ -30,10 +30,13 @@ page {
 }
 
 .btn button {
-  background-color: #3fc53f;
-  border-radius: 15px;
-  margin: 5px 25vw;
-  width: 50%;
+  background-color: #000;
+  width: 360rpx;
+  height: 100rpx;
+  margin-bottom: 12rpx;
+  border-radius: 50rpx;
+  color: white;
+  
 }
 
 .background {
