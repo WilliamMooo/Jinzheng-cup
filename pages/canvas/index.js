@@ -492,12 +492,14 @@ Page({
 
   },
   isPencil: function () {
+    drawType = 'color'
     var _this = this
     _this.data.ispencil = true
     _this.data.isclear = false
   },
 
   isClear: function () {
+    drawType = 'color'
     var _this = this
     _this.data.isclear = true
     _this.data.ispencil = false
@@ -511,6 +513,7 @@ Page({
     })
   },
   toggleColorPicker(e) { //调色板函数
+    drawType = 'color'
     this.setData({
       showColorPicker: !this.data.showColorPicker
     })

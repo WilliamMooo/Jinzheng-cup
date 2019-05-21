@@ -1,9 +1,11 @@
 <!--pages/canvas/index.wxml-->
+<!-- <cover-view> -->
   <view class="masktest"  wx:if="{{showColorPicker}}" bindtap='closeColorPicker'>
     <view class="color-picker-wrapper" wx:if="{{showColorPicker}}">
       <color-picker data-id="3" class="color-picker" colorData="{{colorData}}" rpxRatio="{{rpxRatio}}" bindchangecolor="onChangeColor"></color-picker>
     </view>
     </view>
+  <!-- </cover-view> -->
     <!-- 遮罩层 -->
 <cover-view class="mask" catchtouchmove="preventTouchMove" wx:if="{{showModal}}"></cover-view>
 <!-- 弹出层 -->
