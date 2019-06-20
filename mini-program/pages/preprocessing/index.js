@@ -271,7 +271,7 @@ function cleanthephoto(data) {
         }
       }
       while (head < tail)
-      if (tail <= 50) {
+      if (tail <= 100) {
         for (let m = 1; m <= tail; m++) {
           let x = arr[m]
           data[x] = 0
@@ -342,7 +342,7 @@ Page({
     let _this = this
     setTimeout(function(){
       _this.furtherprocess()
-    },1000)
+    },2000)
   },
 
   processpic: function () {
@@ -428,7 +428,8 @@ Page({
           height: cfg.canvasHeight,
           success: (res) => {
             console.log(res)
-            _this.processpic()
+              _this.processpic()
+            // wx.hideLoading()
           },
           fail: (err) => {
             console.error(err)
